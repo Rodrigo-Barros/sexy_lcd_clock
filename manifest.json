@@ -4,11 +4,15 @@
   "description": "Firefox 57+ compatible awesome LCD clock extension",
   "version": "0.1",
   "homepage_url": "https://github.com/asiniy/sexy_lcd_clock",
-
+  "applications": {
+    "gecko": {
+      "id": "rodrigogenio12@gmail.com"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/index.js"],
+      "js": ["content_scripts/index.js", "settings/options.js"],
       "css": ["content_scripts/index.css"],
       "all_frames": false
     }
@@ -16,13 +20,10 @@
   "background": {
     "scripts": ["background/index.js"]
   },
+  "options_ui": {
+    "page": "settings/options.html"
+  },
+  "web_accessible_resources": ["assets/sound.wav"],
 
-  "web_accessible_resources": [
-    "assets/sound.wav"
-  ],
-
-  "permissions": [
-    "activeTab",
-    "tabs"
-  ]
+  "permissions": ["activeTab", "tabs", "storage"]
 }
