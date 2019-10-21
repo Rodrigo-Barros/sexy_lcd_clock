@@ -27,44 +27,49 @@ async function formatTime(date) {
   return hour + ":" + minute + " " + amPM;
 }
 
-var minutesChanged = function(newDate, oldDate) {
+async function minutesChanged(newDate, oldDate) {
   var newDateMinutes = newDate.getMinutes();
   var oldDateMinutes = oldDate.getMinutes();
 
   return newDateMinutes !== oldDateMinutes;
-};
+}
 
-var soundTime = function(date) {
+async function soundTime(date) {
   minutes = date.getMinutes();
-
   var minuteIsCorrect = [0, 30].includes(minutes);
   var secondIsCorrect = date.getSeconds() < 2;
 
+  return true;
   if (minuteIsCorrect && secondIsCorrect) {
     return true;
   }
 
   return false;
-};
+}
 
-var tick = function() {
+async function tack() {
   var date = new Date();
-  if (minutesChanged(date, window.sexyLCDClockDate)) {
-    counter.innerHTML = formatTime(date);
 
-    if (soundTime(date)) {
+  minutesdiff = await minutesChanged(date, window.sexyLCDClockDate);
+
+  console.log(minutesdiff);
+
+  if (await minutesdiff /*minutesChanged(date, window.sexyLCDClockDate)*/) {
+    counter.innerHTML = await formatTime(date);
+
+    if (await soundTime(date)) {
       var sound = new Audio(browser.extension.getURL("assets/sound.wav"));
       sound.play();
     }
 
     window.sexyLCDClockDate = date;
   }
-};
+}
 
 async function mountClock() {
   window.sexyLCDClockDate = new Date();
 
-  var counter = document.createElement("div");
+  counter = document.createElement("div");
   counter.className = "sexy_lcd_clock";
   counter.innerHTML = await formatTime(window.sexyLCDClockDate);
 
@@ -77,10 +82,13 @@ async function mountClock() {
   });
 
   document.body.insertBefore(counter, document.body.firstChild);
-
-  browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  /*setInterval(() => {
+    tick();
+  }, 2000);*/
+  //await tick();
+  await browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.sexyLCDClockTick == true) {
-      tick();
+      tack();
     }
   });
 }
