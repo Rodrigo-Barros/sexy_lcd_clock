@@ -3,6 +3,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <style>
+      textarea {
+        width: 75%;
+        height: 200px;
+        display: block;
+        margin-bottom: 20px;
+      }
+    </style>
   </head>
 
   <body>
@@ -12,6 +20,17 @@
         <option value="12">12 hour clock</option>
         <option value="24">24 hour clock</option>
       </select>
+      <br />
+
+      <label for="customCss">Custom css</label>
+      <br />
+      <textarea
+        name="customCss"
+        id="customCss"
+        placeholder="put here your custom css to change the styles of the clock"
+      >
+      </textarea>
+
       <button type="submit">Save</button>
     </form>
 

@@ -39,7 +39,6 @@ async function soundTime(date) {
   var minuteIsCorrect = [0, 30].includes(minutes);
   var secondIsCorrect = date.getSeconds() < 2;
 
-  return true;
   if (minuteIsCorrect && secondIsCorrect) {
     return true;
   }
@@ -70,7 +69,32 @@ async function mountClock() {
   window.sexyLCDClockDate = new Date();
 
   counter = document.createElement("div");
-  counter.className = "sexy_lcd_clock";
+  //counter.className = "sexy_lcd_clock";
+
+  counter.className = await browser.storage.sync.get().then((result) => {
+    if (result.customCss == "") {
+      return "sexy_lcd_clock";
+    }
+    return "custom-style";
+  });
+
+  customStyleSheet = await browser.storage.sync.get().then((result) => {
+    return result.customCss;
+  });
+
+  if (counter.className == "custom-style") {
+    var customStyle = document.createElement("style");
+    customStyle.type = "text/css";
+    customStyle.innerHTML = ".custom-style {";
+    customStyle.innerHTML += customStyleSheet;
+    customStyle.innerHTML += "}";
+    customStyle.innerHTML += ".hidden{ display:none }";
+    document.getElementsByTagName("head")[0].appendChild(customStyle);
+    console.log(customStyle);
+    console.log(counter.className);
+    addClass(counter, "custom-style");
+  }
+
   counter.innerHTML = await formatTime(window.sexyLCDClockDate);
 
   counter.addEventListener("mouseenter", function() {
