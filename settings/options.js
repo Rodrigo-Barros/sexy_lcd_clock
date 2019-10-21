@@ -7,7 +7,7 @@ function saveOptions(e) {
 
 function restoreOptions() {
   function setCurrentChoice(result) {
-    document.querySelector("#clockFormat").value = result.clockFormat || "blue";
+    document.querySelector("#clockFormat").value = result.clockFormat || "12";
   }
 
   function onError(error) {

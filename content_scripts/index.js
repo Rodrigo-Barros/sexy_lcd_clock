@@ -3,16 +3,16 @@ async function formatTime(date) {
   var minute = date.getMinutes();
   var amPM = hour > 11 ? "PM" : "AM";
 
-  if (hour > 12) {
-    hour -= 12;
-  } else if (hour === 0) {
-    hour = 12;
-  }
-
   await browser.storage.sync.get("clockFormat").then((result) => {
-    result.clockFormat = 24;
     if (parseInt(result.clockFormat) == 24) {
       hour = date.getHours();
+      amPM = "";
+    } else if (result.clockFormat == "undefined" || parseInt(result.clockFormat) == "12") {
+      if (hour > 12) {
+        hour -= 12;
+      } else if (hour === 0) {
+        hour = 12;
+      }
     }
   });
 
