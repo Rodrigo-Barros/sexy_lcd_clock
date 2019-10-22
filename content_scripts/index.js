@@ -1,7 +1,12 @@
+// I Have to change somes functions to async to work with settings pages
+
 async function formatTime(date) {
   var hour = date.getHours();
   var minute = date.getMinutes();
   var amPM = hour > 11 ? "PM" : "AM";
+
+  // switch betwwen 12 and 24 clock format the clock format is get from addon settings page if
+  // none setting is found then choose 12 clock as default/fallback
 
   await browser.storage.sync.get("clockFormat").then((result) => {
     if (parseInt(result.clockFormat) == 24) {
@@ -46,14 +51,12 @@ async function soundTime(date) {
   return false;
 }
 
-async function tack() {
+async function tick() {
   var date = new Date();
 
   minutesdiff = await minutesChanged(date, window.sexyLCDClockDate);
 
-  console.log(minutesdiff);
-
-  if (await minutesdiff /*minutesChanged(date, window.sexyLCDClockDate)*/) {
+  if (await minutesChanged(date, window.sexyLCDClockDate)) {
     counter.innerHTML = await formatTime(date);
 
     if (await soundTime(date)) {
@@ -69,7 +72,6 @@ async function mountClock() {
   window.sexyLCDClockDate = new Date();
 
   counter = document.createElement("div");
-  //counter.className = "sexy_lcd_clock";
 
   counter.className = await browser.storage.sync.get().then((result) => {
     if (result.customCss == "") {
@@ -82,17 +84,19 @@ async function mountClock() {
     return result.customCss;
   });
 
+  // check if the css style is set to default or custom, to set custom style for clock just
+  // put css styles on addon settings page
+
   if (counter.className == "custom-style") {
     var customStyle = document.createElement("style");
     customStyle.type = "text/css";
-    customStyle.innerHTML = ".custom-style {";
+    customStyle.innerHTML = ".sexy_lcd_clock_custom_style {";
     customStyle.innerHTML += customStyleSheet;
     customStyle.innerHTML += "}";
     customStyle.innerHTML += ".hidden{ display:none }";
     document.getElementsByTagName("head")[0].appendChild(customStyle);
-    console.log(customStyle);
-    console.log(counter.className);
-    addClass(counter, "custom-style");
+
+    addClass(counter, "sexy_lcd_clock_custom_style");
   }
 
   counter.innerHTML = await formatTime(window.sexyLCDClockDate);
@@ -106,13 +110,10 @@ async function mountClock() {
   });
 
   document.body.insertBefore(counter, document.body.firstChild);
-  /*setInterval(() => {
-    tick();
-  }, 2000);*/
-  //await tick();
+
   await browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.sexyLCDClockTick == true) {
-      tack();
+      tick();
     }
   });
 }
