@@ -74,7 +74,7 @@ async function mountClock() {
   counter = document.createElement("div");
 
   counter.className = await browser.storage.sync.get().then((result) => {
-    if (result.customCss == "") {
+    if (result.customCss == "" || typeof result.customCss == "undefined") {
       return "sexy_lcd_clock";
     }
     return "custom-style";

@@ -9,7 +9,7 @@ function saveOptions(e) {
 function restoreOptions() {
   function setCurrentChoice(result) {
     document.querySelector("#clockFormat").value = result.clockFormat || "12";
-    document.querySelector("#customCss").value = result.customCss;
+    document.querySelector("#customCss").value = result.customCss || "";
   }
 
   function onError(error) {
