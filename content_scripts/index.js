@@ -90,13 +90,11 @@ async function mountClock() {
   if (counter.className == "custom-style") {
     var customStyle = document.createElement("style");
     customStyle.type = "text/css";
-    customStyle.innerHTML = ".sexy_lcd_clock_custom_style {";
-    customStyle.innerHTML += customStyleSheet;
-    customStyle.innerHTML += "}";
+    customStyle.innerHTML = ".custom-style {" + customStyleSheet + "}";
     customStyle.innerHTML += ".hidden{ display:none }";
     document.getElementsByTagName("head")[0].appendChild(customStyle);
 
-    addClass(counter, "sexy_lcd_clock_custom_style");
+    addClass(counter, "custom-style");
   }
 
   counter.innerHTML = await formatTime(window.sexyLCDClockDate);
