@@ -1,8 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "Sexy LCD clock",
+  "icons":{
+    "64":"assets/icon.png"
+  },
+  "name": "Sexy LCD clock plus",
   "description": "Firefox 57+ compatible awesome LCD clock extension",
-  "version": "0.1",
   "homepage_url": "https://github.com/asiniy/sexy_lcd_clock",
   "content_scripts": [
     {
@@ -20,5 +22,7 @@
   },
   "web_accessible_resources": ["assets/sound.wav"],
 
-  "permissions": ["activeTab", "tabs", "storage"]
+  "permissions": ["activeTab", "tabs", "storage"],
+
+  "version": "0.3"
 }

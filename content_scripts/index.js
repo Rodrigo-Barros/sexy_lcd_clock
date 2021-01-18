@@ -53,15 +53,21 @@ async function soundTime(date) {
 
 async function tick() {
   var date = new Date();
-
   minutesdiff = await minutesChanged(date, window.sexyLCDClockDate);
 
   if (await minutesChanged(date, window.sexyLCDClockDate)) {
     counter.innerHTML = await formatTime(date);
-
     if (await soundTime(date)) {
       var sound = new Audio(browser.extension.getURL("assets/sound.wav"));
-      sound.play();
+      //sound.play();
+      await browser.storage.sync.get('sound').then((result)=>{
+        console.log(result.sound);
+        if (result.sound == 'enable' )
+        {
+          console.log('reproduzindo som...');
+          sound.play();
+        }
+      });
     }
 
     window.sexyLCDClockDate = date;
